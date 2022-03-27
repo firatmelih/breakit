@@ -1,23 +1,23 @@
-import { CHANGE_THEME, CHANGE_LANGUAGE } from '../types'
+import { ADD_ADDICTION, LOAD_ADDICTIONS } from '../types'
 
 const INITIAL_STATE = {
-  theme: 'dark',
-  loading: false,
-  language:'de'
+  addictions: []
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case CHANGE_THEME:
+    case ADD_ADDICTION:
       return {
         ...state,
-        theme: action.payload
+        addictions: [...state.addictions, action.payload]
       }
-    case CHANGE_LANGUAGE:
+
+    case LOAD_ADDICTIONS:
       return {
         ...state,
-        language: action.payload
+        addictions: action.payload
       }
+
     default:
       return state
   }

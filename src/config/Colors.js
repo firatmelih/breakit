@@ -4,10 +4,13 @@ export const Colors = {
     color: 'aqua',
     inputBackgroundColor: '#212121',
     inputColor: 'aqua',
+    modalBackgroundColor: '#363636',
   },
   light: {
-    backgroundColor: '#E3E3E3',
-    color: 'aqua',
-    inputBackgroundColor: '#fdfdfd',
+    backgroundColor: '#EDEDED',
+    color: '#00566B',
+    inputBackgroundColor: '#EDEDED',
+    inputColor:'#003D4D',
+    modalBackgroundColor: '#EDEDED',
   },
 }

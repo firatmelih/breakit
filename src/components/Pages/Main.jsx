@@ -1,142 +1,143 @@
-import { useState } from 'react'
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Modal,
-} from 'react-native'
+import { useEffect, useState } from 'react'
+import { Alert, Modal, StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 import { changeTheme } from '../../store/actions/appActions'
+import { addAddiction, loadAddictions } from '../../store/actions/addictionActions'
 import { Colors } from '../../config/Colors'
+import { getAddictions, setAddictions, wipeAddictions } from '../../hooks/fileHooks'
+import { AText } from '../Atoms/AText'
+import { MCircleButton } from '../Molecules/MCircleButton'
+import { OModal } from '../Organisms/OModal'
+import { counterFormatter } from '../../utilities/counterFormatter'
+import { Languages } from '../../config/Languages'
 
-const Component = ({ theme, changeTheme }) => {
+
+const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddiction, language }) => {
   const [input, setInput] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
+  const [time, setTime] = useState(Date.now())
+
+  useEffect(() => {
+    getAddictions().then(value => loadAddictions(value))
+    // const interval = setInterval(() => setTime(Date.now()), 1000)
+    // return () => {
+    //   clearInterval(interval)
+    // }
+  }, [])
+
+  useEffect(() => {
+    console.log(language)
+  }, [language])
+
+  useEffect(async () => {
+    await setAddictions(addictions)
+  }, [addictions])
+
+  const onSubmitModal = () => {
+    addAddiction({ 'dateStarted': new Date(), 'name': input })
+    toggleModalVisibility()
+    setInput('')
+  }
+
+  const toggleModalVisibility = () => {
+    setModalVisible(!modalVisible)
+  }
 
   const styles = StyleSheet.create({
     container: {
-      width: '100%',
-      height: '100%',
       flex: 1,
-      display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: Colors[theme].backgroundColor,
-      color: Colors[theme].color,
+      color: Colors[theme].color
     },
-    input: {
+    addictionsArea: {
+      display: 'flex',
+      flexDirection: 'row',
       borderWidth: 1,
-      borderRadius: 5,
+      justifyContent: 'space-between',
       width: '75%',
-      textAlign: 'center',
-      color: Colors[theme].inputColor,
-      backgroundColor: Colors[theme].inputBackgroundColor,
-    },
-    addictionButton: {
-      borderRadius: 100,
-      borderColor: Colors[theme].color,
-      borderWidth: 5,
-      width: 200,
-      height: 200,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    addictionButtonText: {
-      fontWeight: 'bold',
-      fontSize: 25,
-      textAlign: 'center',
-      color: Colors[theme].color,
-    },
-    text: {
-      color: Colors[theme].color,
-      padding: 5,
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 22,
-      backgroundColor: '#ffffff',
-    },
-    modal: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    modalView: {
-      borderRadius: 15,
-      backgroundColor: '#363636',
-      width: 300,
-      height: 100,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+      borderColor: Colors[theme].color
+    }
   })
 
   return (
     <View style={{ ...styles[theme], ...styles.container }}>
       <Modal
-        animationType='slide'
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-          setModalVisible(!modalVisible)
-        }}
+        onRequestClose={toggleModalVisibility}
       >
-        <View style={styles.modal}>
-          <View style={styles.modalView}>
-            <Text style={styles.text}>Name of Addiction</Text>
-            <TextInput
-              onChangeText={(e) => setInput(e)}
-              value={input}
-              style={styles.input}
-            />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.text}>ENTER</Text>
-            </Pressable>
-          </View>
-        </View>
+        <OModal
+          submitModal={onSubmitModal}
+          nameOfAddiction={input}
+          onChangeText={(e) => setInput(e)}
+        />
       </Modal>
-      <TouchableOpacity
-        onPress={() => setModalVisible(!modalVisible)}
-        style={styles.addictionButton}
+      <MCircleButton
+        style={{ position: 'absolute', top: 75 }}
+        size={'medium'}
+        onPress={toggleModalVisibility}
       >
-        <Text style={styles.addictionButtonText}>Enter Addiction</Text>
-      </TouchableOpacity>
-      {/* 
-      <Pressable
+        {Languages[language].main.enterAddiction}
+      </MCircleButton>
+      <MCircleButton
+        style={{ position: 'absolute', right: 0, bottom: 0 }}
+        size={'small'}
         onPress={() => {
-          let newTheme = theme === 'light' ? 'dark' : 'light'
-          changeTheme(newTheme)
+          Alert.alert(
+            Languages[language].main.alert.title,
+            Languages[language].main.alert.message,
+            [
+              {
+                text: Languages[language].main.alert.yes,
+                onPress: () => {
+                  wipeAddictions()
+                    .then(res=>getAddictions()
+                      .then(value=>loadAddictions(value)))
+                }
+              },
+              {
+                text: Languages[language].main.alert.no,
+                style: 'cancel'
+              }
+            ]
+          )
         }}
-      >
-        <Text style={styles.text}>changeTheme</Text>
-      </Pressable> */}
+      >{Languages[language].main.wipeData}</MCircleButton>
+      {
+        addictions.map((addiction, index) => {
+          let dateQuit = new Date(addiction.dateStarted)
+          const dateToNow = ((time - dateQuit.getTime()) / 1000).toFixed()
+          return (<View
+            style={styles.addictionsArea}
+            key={index}
+          >
+            <AText style={{ padding: 15 }}>{Languages[language].main.addictionsArea.iQuit + addiction.name + Languages[language].main.addictionsArea.for}</AText>
+            <AText style={{ padding: 15 }}> {dateToNow > 0 ? counterFormatter(dateToNow) : null}</AText>
+          </View>)
+        })
+      }
     </View>
   )
 }
 
 const mapState = (state) => {
-  const { theme } = state.appState
-
+  const { theme, language } = state.appState
+  const { addictions } = state.addictionState
   return {
     theme,
+    addictions,
+    language
   }
 }
 
 const mapDispatch = {
   changeTheme,
+  loadAddictions,
+  addAddiction
 }
 
 export const Main = connect(mapState, mapDispatch, null, {
-  forwardRef: true,
+  forwardRef: true
 })(Component)
