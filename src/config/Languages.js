@@ -69,7 +69,7 @@ export const Languages = {
       changeTheme: 'Temayı Değiştir',
       wipeData: 'Veriyi Sil',
       modal: {
-        iQuit: 'Bıraktım ',
+        iQuit: 'Neyi Bıraktım? ',
         enter: 'Onayla',
       },
       alert: {
@@ -79,8 +79,8 @@ export const Languages = {
         no: 'HAYIR'
       },
       addictionsArea:{
-        for:' ',
-        iQuit:'Bıraktım ',
+        for:' boyunca',
+        iQuit:' bıraktım ',
         days:'g ',
         hours:'s ',
         minutes:'d ',

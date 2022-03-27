@@ -13,6 +13,8 @@ const Component = ({ onChangeText, inputValue, theme, size }) => {
       borderWidth: 1,
       borderRadius: 5,
       width: level[size] || '75%',
+      minHeight:25,
+      margin:5,
       textAlign: 'center',
       color: Colors[theme].inputColor,
       backgroundColor: Colors[theme].inputBackgroundColor

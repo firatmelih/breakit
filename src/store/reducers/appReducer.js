@@ -3,7 +3,7 @@ import { CHANGE_THEME, CHANGE_LANGUAGE } from '../types'
 const INITIAL_STATE = {
   theme: 'dark',
   loading: false,
-  language:'de'
+  language:'en'
 }
 
 export default (state = INITIAL_STATE, action) => {

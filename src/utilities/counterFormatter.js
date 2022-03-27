@@ -1,9 +1,7 @@
 import { AText } from '../components/Atoms/AText'
-import { useSelector } from 'react-redux'
 import { Languages } from '../config/Languages'
 
-export const counterFormatter = (moment) => {
-  const language = useSelector((state) => state.appState.language)
+export const  counterFormatter = (moment, language) => {
   let time = moment
   const minutes = Math.floor(moment / 60) % 60
   time -= minutes * 60

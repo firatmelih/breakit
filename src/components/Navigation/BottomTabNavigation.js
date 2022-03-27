@@ -14,7 +14,7 @@ const BottomTab = createBottomTabNavigator()
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName
-
+          console.log(route.name)
           if (route.name === 'Home') {
             iconName = focused ? 'ios-home-sharp' : 'ios-home-outline'
           } else if (route.name === 'Settings') {
@@ -33,7 +33,6 @@ const BottomTab = createBottomTabNavigator()
         tabBarStyle: {
           paddingVertical: 5,
           backgroundColor: Colors[theme].inputBackgroundColor,
-          height: 50,
         },
         title:Languages[language].bottomNav[route.name],
         tabBarLabelStyle: { paddingBottom: 3 }
@@ -41,7 +40,7 @@ const BottomTab = createBottomTabNavigator()
     >
       <BottomTab.Screen
         options={{
-          headerShown: false
+          headerShown: false,
         }}
         name="Home"
         component={Main}

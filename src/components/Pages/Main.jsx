@@ -19,10 +19,10 @@ const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddictio
 
   useEffect(() => {
     getAddictions().then(value => loadAddictions(value))
-    // const interval = setInterval(() => setTime(Date.now()), 1000)
-    // return () => {
-    //   clearInterval(interval)
-    // }
+    const interval = setInterval(() => setTime(Date.now()), 1000)
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
   useEffect(() => {
@@ -49,7 +49,9 @@ const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddictio
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: Colors[theme].backgroundColor,
-      color: Colors[theme].color
+      color: Colors[theme].color,
+      borderWidth: 25,
+      borderColor: Colors[theme].backgroundColor
     },
     addictionsArea: {
       display: 'flex',
@@ -82,7 +84,7 @@ const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddictio
         {Languages[language].main.enterAddiction}
       </MCircleButton>
       <MCircleButton
-        style={{ position: 'absolute', right: 0, bottom: 0 }}
+        style={{ position: 'absolute', bottom: 0 }}
         size={'small'}
         onPress={() => {
           Alert.alert(
@@ -93,8 +95,8 @@ const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddictio
                 text: Languages[language].main.alert.yes,
                 onPress: () => {
                   wipeAddictions()
-                    .then(res=>getAddictions()
-                      .then(value=>loadAddictions(value)))
+                    .then(res => getAddictions()
+                      .then(value => loadAddictions(value)))
                 }
               },
               {
@@ -109,13 +111,35 @@ const Component = ({ addictions, theme, changeTheme, loadAddictions, addAddictio
         addictions.map((addiction, index) => {
           let dateQuit = new Date(addiction.dateStarted)
           const dateToNow = ((time - dateQuit.getTime()) / 1000).toFixed()
-          return (<View
-            style={styles.addictionsArea}
-            key={index}
-          >
-            <AText style={{ padding: 15 }}>{Languages[language].main.addictionsArea.iQuit + addiction.name + Languages[language].main.addictionsArea.for}</AText>
-            <AText style={{ padding: 15 }}> {dateToNow > 0 ? counterFormatter(dateToNow) : null}</AText>
-          </View>)
+
+          if (language === 'tr') {
+            return <View
+              style={styles.addictionsArea}
+              key={index}
+            >
+              <AText style={{ padding: 15 }}>
+                {dateToNow > 0 ? counterFormatter(
+                  dateToNow,
+                  language
+                ) : null}{Languages[language].main.addictionsArea.for}
+              </AText>
+              <AText style={{ padding: 15 }}>
+                {language === 'tr' ? addiction.name + Languages[language].main.addictionsArea.iQuit : Languages[language].main.addictionsArea.iQuit + addiction.name + Languages[language].main.addictionsArea.for}
+              </AText>
+            </View>
+          } else {
+            return <View
+              style={styles.addictionsArea}
+              key={index}
+            >
+
+              <AText style={{ padding: 15 }}>{language === 'tr' ? addiction.name + Languages[language].main.addictionsArea.iQuit : Languages[language].main.addictionsArea.iQuit + addiction.name + Languages[language].main.addictionsArea.for}</AText>
+              <AText style={{ padding: 15 }}> {dateToNow > 0 ? counterFormatter(
+                dateToNow,
+                language
+              ) : null}</AText>
+            </View>
+          }
         })
       }
     </View>
