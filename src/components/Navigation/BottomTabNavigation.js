@@ -14,7 +14,6 @@ const BottomTab = createBottomTabNavigator()
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName
-          console.log(route.name)
           if (route.name === 'Home') {
             iconName = focused ? 'ios-home-sharp' : 'ios-home-outline'
           } else if (route.name === 'Settings') {

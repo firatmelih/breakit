@@ -1,7 +1,8 @@
-import { ADD_ADDICTION, LOAD_ADDICTIONS } from '../types'
+import { ADD_ADDICTION, LOAD_ADDICTIONS, REMOVE_ADDICTION, LOAD_NUMBER_ADDICTIONS } from '../types'
 
 const INITIAL_STATE = {
-  addictions: []
+  addictions: [],
+  allAddictions: 0
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -9,7 +10,7 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_ADDICTION:
       return {
         ...state,
-        addictions: [...state.addictions, action.payload]
+        addictions: [...state.addictions, action.payload],
       }
 
     case LOAD_ADDICTIONS:
@@ -18,6 +19,11 @@ export default (state = INITIAL_STATE, action) => {
         addictions: action.payload
       }
 
+    case REMOVE_ADDICTION:
+      return {
+        ...state,
+        addictions: action.payload
+      }
     default:
       return state
   }

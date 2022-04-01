@@ -48,6 +48,7 @@ const Component = ({ theme, changeTheme, language, changeLanguage }) => {
     buttonsArea: {
       position:'absolute',
       flexDirection: 'row',
+      width:'50%',
       flexWrap: 'wrap',
       display:'flex',
       justifyContent: 'space-between',

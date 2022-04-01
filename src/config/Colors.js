@@ -1,14 +1,14 @@
 export const Colors = {
   dark: {
-    backgroundColor: '#0a0c0d',
-    color: 'aqua',
+    backgroundColor: '#303030',
+    color: '#60D553',
     inputBackgroundColor: '#212121',
     inputColor: 'aqua',
     modalBackgroundColor: '#363636',
   },
   light: {
-    backgroundColor: '#EDEDED',
-    color: '#00566B',
+    backgroundColor: '#ffffff',
+    color: '#8EBD5B',
     inputBackgroundColor: '#EDEDED',
     inputColor:'#003D4D',
     modalBackgroundColor: '#EDEDED',

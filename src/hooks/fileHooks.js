@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { loadAddictions } from '../store/actions/addictionActions'
 
 export const getAddictions = async () => {
   let value = []
@@ -19,4 +18,9 @@ export const setAddictions = async (addictions) => {
 
 export const wipeAddictions = async () => {
   await AsyncStorage.clear()
+}
+
+export const removeAddiction = async (newAddictions) => {
+  const addictions = JSON.stringify(newAddictions)
+  await AsyncStorage.setItem('addictions', addictions)
 }
